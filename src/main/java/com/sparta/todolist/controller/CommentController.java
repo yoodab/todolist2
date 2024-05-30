@@ -31,4 +31,14 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    @DeleteMapping("/todos/{todoId}/comments/{commentId}")
+    public ResponseEntity<Message> deleteComment(@PathVariable Long todoId,
+                                                 @PathVariable Long commentId,
+                                                 @RequestHeader(name = "userId", required = false) String currentUserId) {
+        commentService.deleteComment(todoId, commentId, currentUserId);
+        Message response = Message.createResponse(StatusEnum.OK, "댓글 삭제 성공", null);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

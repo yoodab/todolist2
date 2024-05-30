@@ -62,4 +62,22 @@ public class CommentService {
 
         return new CommentResponseDto(comment);
     }
+
+    @Transactional
+    public void deleteComment(Long todoId, Long commentId, String currentUserId) {
+        if (todoId == null || commentId == null) {
+            throw new IllegalArgumentException("일정 ID 또는 댓글 ID가 입력되지 않았습니다.");
+        }
+
+        todoRepository.findById(todoId).orElseThrow(() -> new TodoNotFoundException("일정이 존재하지 않습니다."));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new TodoNotFoundException("댓글이 존재하지 않습니다."));
+
+        if (!comment.getUser_id().equals(currentUserId)) {
+            throw new InvalidPasswordException("댓글의 작성자만 삭제할 수 있습니다.");
+        }
+
+        commentRepository.delete(comment);
+    }
 }

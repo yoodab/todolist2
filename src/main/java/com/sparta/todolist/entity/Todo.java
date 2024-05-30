@@ -27,7 +27,7 @@ public class Todo extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "todo")
+    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
 
