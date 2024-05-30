@@ -1,5 +1,7 @@
 package com.sparta.todolist.exception;
 
+import com.sparta.todolist.exception.message.ErrorMessage;
+import com.sparta.todolist.exception.message.StatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,21 +16,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TodoExceptionHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
+    public ResponseEntity<ErrorMessage> handleInvalidPasswordException(InvalidPasswordException ex) {
         log.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        ErrorMessage response = ErrorMessage.createErrorResponse(StatusEnum.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(TodoNotFoundException.class)
-    public ResponseEntity<String> handleTodoNotFoundException(TodoNotFoundException ex) {
+    public ResponseEntity<ErrorMessage> handleTodoNotFoundException(TodoNotFoundException ex) {
         log.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        ErrorMessage response = ErrorMessage.createErrorResponse(StatusEnum.NOT_FOUND,  ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorMessage> handleValidationExceptions(MethodArgumentNotValidException ex) {
         log.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        ErrorMessage response = ErrorMessage.createErrorResponse(StatusEnum.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorMessage> handleValidationExceptions(IllegalArgumentException ex) {
+        log.error(ex.getMessage());
+        ErrorMessage response = ErrorMessage.createErrorResponse(StatusEnum.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
