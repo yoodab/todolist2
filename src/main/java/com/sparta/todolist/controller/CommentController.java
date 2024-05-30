@@ -23,4 +23,12 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<Message> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto) {
+        CommentResponseDto responseDto = commentService.updateComment(commentId, requestDto);
+        Message response = Message.createResponse(StatusEnum.OK, "댓글 수정 성공", responseDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
 }

@@ -5,6 +5,7 @@ import com.sparta.todolist.dto.CommentRequestDto;
 import com.sparta.todolist.dto.CommentResponseDto;
 import com.sparta.todolist.entity.Comment;
 import com.sparta.todolist.entity.Todo;
+import com.sparta.todolist.exception.InvalidPasswordException;
 import com.sparta.todolist.exception.TodoNotFoundException;
 import com.sparta.todolist.repository.CommentRepository;
 import com.sparta.todolist.repository.TodoRepository;
@@ -41,4 +42,24 @@ public class CommentService {
         return new CommentResponseDto(savedComment);
     }
 
+    @Transactional
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto) {
+        if (commentId == null) {
+            throw new IllegalArgumentException("댓글 ID가 입력되지 않았습니다.");
+        }
+
+        if (requestDto.getContent() == null || requestDto.getContent().isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용이 비어 있습니다.");
+        }
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new TodoNotFoundException("댓글이 존재하지 않습니다."));
+
+        if (!comment.getUser_id().equals(requestDto.getUserId())) {
+            throw new InvalidPasswordException("댓글 작성자만 수정할 수 있습니다.");
+        }
+
+        // 댓글 수정
+        comment.setContent(requestDto.getContent());
+
+        return new CommentResponseDto(comment);
+    }
 }
