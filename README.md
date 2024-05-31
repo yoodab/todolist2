@@ -106,8 +106,9 @@
 
 <details>
 <summary> 📏ERD </summary>
-  <img src="https://github.com/yoodab/todoList/blob/master/ERD.png?raw=true" height="80%"/>
+  <img src="https://github.com/yoodab/todoList2/ERD.png" height="80%"/>
 </details>
+
 
 <details>
 <summary>🧾 API 명세서 </summary>
