@@ -22,28 +22,24 @@ public class Todo extends Timestamped {
     private String title;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
-    private String manager;
-    @Column(nullable = false)
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
 
-    public Todo(TodoRequestDto requestDto) {
+    public Todo(TodoRequestDto requestDto,User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.manager = requestDto.getManager();
-        this.password = requestDto.getPassword();
+        this.user = user;
 
     }
 
     public void update(TodoRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.manager = requestDto.getManager();
-        this.password = requestDto.getPassword();
     }
 }
 

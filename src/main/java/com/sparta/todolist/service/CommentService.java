@@ -5,6 +5,7 @@ import com.sparta.todolist.dto.CommentRequestDto;
 import com.sparta.todolist.dto.CommentResponseDto;
 import com.sparta.todolist.entity.Comment;
 import com.sparta.todolist.entity.Todo;
+import com.sparta.todolist.entity.User;
 import com.sparta.todolist.exception.InvalidPasswordException;
 import com.sparta.todolist.exception.TodoNotFoundException;
 import com.sparta.todolist.repository.CommentRepository;
@@ -21,7 +22,7 @@ public class CommentService {
 
 
     @Transactional
-    public CommentResponseDto createComment(Long todoId, CommentRequestDto requestDto) {
+    public CommentResponseDto createComment(Long todoId, CommentRequestDto requestDto, User user) {
         // 예외 처리
         if (todoId == null) {
             throw new IllegalArgumentException("일정 ID가 입력되지 않았습니다.");
@@ -30,20 +31,18 @@ public class CommentService {
         if (requestDto.getContent() == null || requestDto.getContent().isEmpty()) {
             throw new IllegalArgumentException("댓글 내용이 비어 있습니다.");
         }
-        if (requestDto.getUserId() == null || requestDto.getUserId().isEmpty()) {
-            throw new IllegalArgumentException("사용자 ID가 비어 있습니다.");
-        }
+
 
         Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new TodoNotFoundException("일정이 존재하지 않습니다."));
 
 
-        Comment savedComment = commentRepository.save(new Comment(requestDto,todo));
+        Comment savedComment = commentRepository.save(new Comment(requestDto,todo,user));
 
-        return new CommentResponseDto(savedComment);
+        return new CommentResponseDto(savedComment,user);
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto) {
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto,User user) {
         if (commentId == null) {
             throw new IllegalArgumentException("댓글 ID가 입력되지 않았습니다.");
         }
@@ -53,18 +52,18 @@ public class CommentService {
         }
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new TodoNotFoundException("댓글이 존재하지 않습니다."));
 
-        if (!comment.getUser_id().equals(requestDto.getUserId())) {
+        if (!comment.getUser().getUsername().equals(user.getUsername())) {
             throw new InvalidPasswordException("댓글 작성자만 수정할 수 있습니다.");
         }
 
         // 댓글 수정
         comment.setContent(requestDto.getContent());
 
-        return new CommentResponseDto(comment);
+        return new CommentResponseDto(comment,user);
     }
 
     @Transactional
-    public void deleteComment(Long todoId, Long commentId, String currentUserId) {
+    public void deleteComment(Long todoId, Long commentId,User user) {
         if (todoId == null || commentId == null) {
             throw new IllegalArgumentException("일정 ID 또는 댓글 ID가 입력되지 않았습니다.");
         }
@@ -74,7 +73,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new TodoNotFoundException("댓글이 존재하지 않습니다."));
 
-        if (!comment.getUser_id().equals(currentUserId)) {
+        if (!comment.getUser().getUsername().equals(user.getUsername())) {
             throw new InvalidPasswordException("댓글의 작성자만 삭제할 수 있습니다.");
         }
 

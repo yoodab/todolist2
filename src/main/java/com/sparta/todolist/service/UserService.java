@@ -21,19 +21,11 @@ public class UserService {
 
     public SignupResponseDto signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
-        }
-        // 유효성 검사
-        if (!isValidUsername(username)) {
-            throw new IllegalArgumentException("사용자 이름은 최소 4자 이상, 10자 이하이며 알파벳 소문자(a~z)와 숫자(0~9)로 구성되어야 합니다.");
-        }
-        if (!isValidPassword(password)) {
-            throw new IllegalArgumentException("비밀번호는 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z)와 숫자(0~9)로 구성되어야 합니다.");
         }
 
 
@@ -53,11 +45,4 @@ public class UserService {
         return new SignupResponseDto(saveUser);
     }
 
-    private boolean isValidUsername(String username) {
-        return username != null && username.matches("^[a-z0-9]{4,10}$");
-    }
-
-    private boolean isValidPassword(String password) {
-        return password != null && password.matches("^[a-zA-Z0-9]{8,15}$");
-    }
 }

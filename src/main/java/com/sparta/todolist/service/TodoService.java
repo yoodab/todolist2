@@ -3,6 +3,7 @@ package com.sparta.todolist.service;
 import com.sparta.todolist.dto.TodoRequestDto;
 import com.sparta.todolist.dto.TodoResponseDto;
 import com.sparta.todolist.entity.Todo;
+import com.sparta.todolist.entity.User;
 import com.sparta.todolist.exception.InvalidPasswordException;
 import com.sparta.todolist.exception.TodoNotFoundException;
 import com.sparta.todolist.repository.TodoRepository;
@@ -19,9 +20,9 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public TodoResponseDto createTodo(TodoRequestDto requestDto) {
+    public TodoResponseDto createTodo(TodoRequestDto requestDto, User user) {
         // RequestDto -> Entity
-        Todo todo = new Todo(requestDto);
+        Todo todo = new Todo(requestDto,user);
 
         // DB 저장
         Todo saveTodo = todoRepository.save(todo);
@@ -38,13 +39,13 @@ public class TodoService {
     }
 
     @Transactional
-    public Long updateTodo(Long id, TodoRequestDto requestDto) {
+    public Long updateTodo(Long id, TodoRequestDto requestDto, User user) {
 
         // 해당 메모가 DB에 존재하는지 확인
         Todo todo = getTodo(id);
 
-        // 비밀번호 확인
-        validatePassword(todo.getPassword(), requestDto.getPassword());
+        // username 확인
+        validateUsername(todo.getUser().getUsername(), user.getUsername());
 
         // 수정
         todo.update(requestDto);
@@ -52,12 +53,12 @@ public class TodoService {
         return id;
     }
 
-    public Long deleteTodo(Long id, String password) {
+    public Long deleteTodo(Long id, User user) {
         // 해당 메모가 DB에 존재하는지 확인
         Todo todo = getTodo(id);
 
-        // 비밀번호 확인
-        validatePassword(todo.getPassword(), password);
+        // username 확인
+        validateUsername(todo.getUser().getUsername(), user.getUsername());
 
         // 삭제
         todoRepository.delete(todo);
@@ -72,9 +73,9 @@ public class TodoService {
         );
     }
 
-    private void validatePassword(String actualPassword, String enteredPassword) {
-        if (!actualPassword.equals(enteredPassword)) {
-            throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
+    private void validateUsername(String actualUsername, String enteredUsername) {
+        if (!actualUsername.equals(enteredUsername)) {
+            throw new InvalidPasswordException("작성자가 일치하지 않습니다.");
         }
     }
 }

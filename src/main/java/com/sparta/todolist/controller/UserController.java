@@ -5,6 +5,7 @@ import com.sparta.todolist.dto.SignupResponseDto;
 import com.sparta.todolist.exception.message.Message;
 import com.sparta.todolist.exception.message.StatusEnum;
 import com.sparta.todolist.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<Message> signUp(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<Message> signUp(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         SignupResponseDto responseDto = userService.signup(signupRequestDto);
-        Message response = Message.createResponse(StatusEnum.OK, "일정 작성 성공", responseDto);
+        Message response = Message.createResponse(StatusEnum.OK, "회원가입 성공", responseDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

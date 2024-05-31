@@ -17,15 +17,17 @@ public class Comment extends Timestamped{
 
     private String content;
 
-    private String user_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "todo_id")
     private Todo todo;
 
-    public Comment(CommentRequestDto requestDto, Todo todo) {
+    public Comment(CommentRequestDto requestDto, Todo todo,User user) {
         this.content = requestDto.getContent();
-        this.user_id = requestDto.getUserId();
+        this.user = user;
         this.todo = todo;
     }
 }

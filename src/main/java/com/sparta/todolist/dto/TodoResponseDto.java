@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 @Getter
 public class TodoResponseDto {
 
-    private Long id;
+    private final Long id;
 
-    private String title;
+    private final String title;
 
-    private String content;
-    private String manager;
+    private final String content;
+    private final String username;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
 
 
 
@@ -24,7 +24,7 @@ public class TodoResponseDto {
         this.id = todo.getId();
         this.title = todo.getTitle();
         this.content = todo.getContent();
-        this.manager = todo.getManager();
+        this.username = todo.getUser().getUsername();
         this.createdAt = todo.getCreatedAt();
         this.modifiedAt = todo.getModifiedAt();
     }
