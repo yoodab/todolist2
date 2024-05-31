@@ -99,14 +99,12 @@
 
 
 </details>
-<details>
-<summary>🏃‍♂️Use Case Diagram </summary>
-  <img src="https://raw.githubusercontent.com/yoodab/todoList/1b15a49a21325d01420e4f749b9365ff540344cf/todoList.png" height="100%"/>
-</details>
 
 <details>
 <summary> 📏ERD </summary>
-  <img src="https://github.com/yoodab/todoList2/ERD.png" height="80%"/>
+  <p align="center">
+  <img src="https://github.com/yoodab/todolist2/assets/109517088/c1119113-75dc-4b92-808d-70581ef3afff">
+</p>
 </details>
 
 
@@ -124,50 +122,77 @@
 
 ## 🏗 프로젝트 구조
 ```
-+---main
-|   +---java
-|   |   \---com
-|   |       \---sparta
-|   |           \---todolist
-|   |               |   TodoListApplication.java
-|   |               |
-|   |               +---config
-|   |               |       SwaggerConfig.java
-|   |               |
-|   |               +---controller
-|   |               |       TodoController.java
-|   |               |
-|   |               +---dto
-|   |               |       TodoRequestDto.java
-|   |               |       TodoResponseDto.java
-|   |               |
-|   |               +---entity
-|   |               |       Timestamped.java
-|   |               |       Todo.java
-|   |               |
-|   |               +---exception
-|   |               |       InvalidPasswordException.java
-|   |               |       TodoExceptionHandler.java
-|   |               |       TodoNotFoundException.java
-|   |               |
-|   |               +---repository
-|   |               |       TodoRepository.java
-|   |               |
-|   |               \---service
-|   |                       TodoService.java
-|   |
-|   \---resources
-|       |   application.properties
-|       |
-|       +---static
-|       \---templates
-\---test
-    \---java
-        \---com
-            \---sparta
-                \---todolist
+├─main
+│  ├─java
+│  │  └─com
+│  │      └─sparta
+│  │          └─todolist
+│  │              │  TodoListApplication.java
+│  │              │
+│  │              ├─config
+│  │              │      SwaggerConfig.java
+│  │              │      WebSecurityConfig.java
+│  │              │
+│  │              ├─controller
+│  │              │      CommentController.java
+│  │              │      TodoController.java
+│  │              │      UserController.java
+│  │              │
+│  │              ├─dto
+│  │              │      CommentRequestDto.java
+│  │              │      CommentResponseDto.java
+│  │              │      LoginRequestDto.java
+│  │              │      SignupRequestDto.java
+│  │              │      SignupResponseDto.java
+│  │              │      TodoRequestDto.java
+│  │              │      TodoResponseDto.java
+│  │              │
+│  │              ├─entity
+│  │              │      Comment.java
+│  │              │      Timestamped.java
+│  │              │      Todo.java
+│  │              │      User.java
+│  │              │      UserRoleEnum.java
+│  │              │
+│  │              ├─exception
+│  │              │  │  InvalidPasswordException.java
+│  │              │  │  TodoExceptionHandler.java
+│  │              │  │  TodoNotFoundException.java
+│  │              │  │
+│  │              │  └─message
+│  │              │          ErrorMessage.java
+│  │              │          Message.java
+│  │              │          StatusEnum.java
+│  │              │
+│  │              ├─jwt
+│  │              │      CustomAuthenticationProvider.java
+│  │              │      JwtAuthenticationFilter.java
+│  │              │      JwtAuthorizationFilter.java
+│  │              │      JwtUtil.java
+│  │              │
+│  │              ├─repository
+│  │              │      CommentRepository.java
+│  │              │      TodoRepository.java
+│  │              │      UserRepository.java
+│  │              │
+│  │              ├─security
+│  │              │      UserDetailsImpl.java
+│  │              │      UserDetailsServiceImpl.java
+│  │              │
+│  │              └─service
+│  │                      CommentService.java
+│  │                      TodoService.java
+│  │                      UserService.java
+│  │
+│  └─resources
+│          application.properties
+│
+└─test
+    └─java
+        └─com
+            └─sparta
+                └─todolist
                         TodoListApplicationTests.java
-
 
 ```
 <br>
